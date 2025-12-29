@@ -2,6 +2,23 @@
 @tailwind components;
 @import './prism.css';
 @tailwind utilities;
+
+/* 苹果风格字体优化 */
+@layer base {
+  /* 系统字体栈 - 苹果设计哲学 */
+  :root {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* 优化字体加载性能 */
+  * {
+    font-display: optional; /* 优化字体显示策略 */
+  }
+}
 @layer base {
   :root {
       --background: 0 0% 100%;

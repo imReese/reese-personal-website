@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -18,20 +18,41 @@ export default function TypingAnimation({
   const [displayedText, setDisplayedText] = useState<string>("");
   const [i, setI] = useState<number>(0);
 
+  const updateText = useCallback(() => {
+    if (i < text.length) {
+      setDisplayedText(text.substring(0, i + 1));
+      setI(i + 1);
+      return true;
+    }
+    return false;
+  }, [i, text]);
+
   useEffect(() => {
-    const typingEffect = setInterval(() => {
-      if (i < text.length) {
-        setDisplayedText(text.substring(0, i + 1));
-        setI(i + 1);
-      } else {
-        clearInterval(typingEffect);
+    // 使用requestAnimationFrame而不是setInterval以获得更好的性能
+    let animationId: number;
+    let lastTime = 0;
+
+    const animate = (time: number) => {
+      if (!lastTime) lastTime = time;
+      
+      if (time - lastTime >= duration) {
+        if (updateText()) {
+          lastTime = time;
+        } else {
+          cancelAnimationFrame(animationId);
+          return;
+        }
       }
-    }, duration);
+      
+      animationId = requestAnimationFrame(animate);
+    };
+
+    animationId = requestAnimationFrame(animate);
 
     return () => {
-      clearInterval(typingEffect);
+      cancelAnimationFrame(animationId);
     };
-  }, [duration, i]);
+  }, [duration, updateText]);
 
   return (
     <h1
@@ -39,8 +60,11 @@ export default function TypingAnimation({
         "font-display text-center text-4xl font-bold leading-[5rem] tracking-[-0.02em] drop-shadow-sm",
         className,
       )}
+      style={{ 
+        willChange: 'transform', // 优化重绘性能
+      }}
     >
-      {displayedText ? displayedText : text}
+      {displayedText || text}
     </h1>
   );
 }

@@ -1,11 +1,20 @@
 import { type Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { getBlogBySlug } from '@/lib/blogs'
+import { getAllBlogs, getBlogBySlug } from '@/lib/blogs'
 import { getMDXContent } from '@/lib/mdx'
 import { BlogLayout } from '@/components/layout/BlogLayout'
 
 export const runtime = process.env.NEXT_RUNTIME === 'edge' ? 'edge' : 'nodejs'
+
+// Generate static params for all blogs
+export async function generateStaticParams() {
+  const blogs = await getAllBlogs()
+  
+  return blogs.map((blog) => ({
+    slug: blog.slug,
+  }))
+}
 
 interface Props {
   params: {

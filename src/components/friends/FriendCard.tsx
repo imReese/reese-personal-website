@@ -19,11 +19,16 @@ export function FriendCard({ friend, titleAs }: { friend: FriendItemType, titleA
             <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full">
               <Image
                 src={friend.logo ?? `https://icons.duckduckgo.com/ip3/${new URL(friend.link.href).hostname}.ico`}
-                alt={`${friend.name} favicon`}
+                alt={`${friend.name} logo`}
                 width={36}
                 height={36}
                 sizes='36px'
                 className="rounded-full"
+                loading="lazy"
+                onError={(e) => {
+                  // 图片加载失败时隐藏
+                  e.currentTarget.style.display = 'none'
+                }}
               />
             </div>
             <Component className="text-base font-semibold">

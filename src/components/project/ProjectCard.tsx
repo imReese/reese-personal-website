@@ -6,7 +6,7 @@ import { ArrowUpRight } from '@phosphor-icons/react'
 import { ProjectItemType } from '@/config/infoConfig'
 import { utm_source } from '@/config/siteConfig'
 import Link from 'next/link'
-import { Favicon } from "favicon-stealer";
+import { OptimizedFavicon } from '@/components/shared/OptimizedFavicon'
 
 export function ProjectCard({ project, titleAs }: { project: ProjectItemType, titleAs?: keyof JSX.IntrinsicElements }) {
   const utmLink = `https://${project.link.href}?utm_source=${utm_source}`
@@ -17,7 +17,7 @@ export function ProjectCard({ project, titleAs }: { project: ProjectItemType, ti
         <div className=''>
           <div className='flex flex-col sm:flex-row justify-center sm:justify-start items-start sm:items-center gap-4'>
             <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full">
-              <Favicon url={project.link.href} />
+              <OptimizedFavicon url={project.link.href} size={36} />
             </div>
             <Component className="text-base font-semibold">
               {project.name}
